@@ -731,11 +731,12 @@
             try {
                 const overlays = [];
 
-                // 1. Create chroma key green translucent overlay mesh (50% opacity)
+                // 1. Create chroma key green translucent wireframe mesh (50% opacity)
                 const greenOverlayMaterial = new THREE.MeshBasicMaterial({
                     color: 0x00ff00,  // Chroma key green
                     transparent: true,
                     opacity: 0.5,
+                    wireframe: true,   // Show as wireframe
                     side: THREE.DoubleSide,
                     depthWrite: false,
                     depthTest: true
@@ -744,15 +745,17 @@
                 const greenOverlay = new THREE.Mesh(mesh.geometry, greenOverlayMaterial);
                 overlays.push(greenOverlay);
 
-                // 2. Create black wireframe on top (use EdgesGeometry for quad preservation)
-                const edges = new THREE.EdgesGeometry(mesh.geometry, 15);
+                // 2. Create black wireframe lines on top for emphasis (using WireframeGeometry for all edges)
+                const wireframeGeom = new THREE.WireframeGeometry(mesh.geometry);
                 const wireframeMaterial = new THREE.LineBasicMaterial({
                     color: 0x000000,  // Black wireframe
                     linewidth: 1,
-                    depthTest: true
+                    depthTest: true,
+                    opacity: 0.8,
+                    transparent: true
                 });
 
-                const wireframe = new THREE.LineSegments(edges, wireframeMaterial);
+                const wireframe = new THREE.LineSegments(wireframeGeom, wireframeMaterial);
                 overlays.push(wireframe);
 
                 return overlays;
