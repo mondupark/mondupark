@@ -660,10 +660,12 @@
             originalMaterials.clear();
 
             // Clear wireframe helpers
-            wireframeHelpers.forEach((helper, mesh) => {
-                mesh.remove(helper);
-                helper.geometry.dispose();
-                helper.material.dispose();
+            wireframeHelpers.forEach((overlays, mesh) => {
+                overlays.forEach(overlay => {
+                    mesh.remove(overlay);
+                    if (overlay.geometry) overlay.geometry.dispose();
+                    if (overlay.material) overlay.material.dispose();
+                });
             });
             wireframeHelpers.clear();
             wireframeEnabled = false;
@@ -698,25 +700,36 @@
             }
         }
 
-        function createWireframeHelper(mesh) {
-            // Use EdgesGeometry with threshold to preserve quad edges better
-            const edges = new THREE.EdgesGeometry(mesh.geometry, 15); // 15 degree threshold
+        function createWireframeOverlay(mesh) {
+            const overlays = [];
 
-            // Chroma key green color (0x00ff00) with transparency
-            const wireframeMaterial = new THREE.LineBasicMaterial({
-                color: 0x00ff00,
+            // 1. Create chroma key green translucent overlay mesh (50% opacity)
+            const greenOverlayMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ff00,  // Chroma key green
                 transparent: true,
-                opacity: 0.7,
-                linewidth: 1
+                opacity: 0.5,
+                side: THREE.DoubleSide,
+                depthWrite: false  // Prevent z-fighting
             });
 
-            const wireframeHelper = new THREE.LineSegments(edges, wireframeMaterial);
+            const greenOverlay = new THREE.Mesh(mesh.geometry, greenOverlayMaterial);
+            greenOverlay.renderOrder = 1;  // Render after original mesh
+            overlays.push(greenOverlay);
 
-            // Match the mesh's transform
-            wireframeHelper.matrix = mesh.matrix;
-            wireframeHelper.matrixAutoUpdate = false;
+            // 2. Create black wireframe on top (use EdgesGeometry for quad preservation)
+            const edges = new THREE.EdgesGeometry(mesh.geometry, 15); // 15 degree threshold
+            const wireframeMaterial = new THREE.LineBasicMaterial({
+                color: 0x000000,  // Black wireframe
+                linewidth: 1,
+                transparent: true,
+                opacity: 1.0
+            });
 
-            return wireframeHelper;
+            const wireframe = new THREE.LineSegments(edges, wireframeMaterial);
+            wireframe.renderOrder = 2;  // Render on top of green overlay
+            overlays.push(wireframe);
+
+            return overlays;
         }
 
         function toggleWireframe() {
@@ -726,20 +739,24 @@
             const btn = document.getElementById('wireframe-btn');
 
             if (wireframeEnabled) {
-                // Add wireframe overlays
+                // Add wireframe overlays (green mesh + black wireframe)
                 currentModel.traverse((child) => {
                     if (child.isMesh) {
-                        const wireframeHelper = createWireframeHelper(child);
-                        child.add(wireframeHelper);
-                        wireframeHelpers.set(child, wireframeHelper);
+                        const overlays = createWireframeOverlay(child);
+                        overlays.forEach(overlay => {
+                            child.add(overlay);
+                        });
+                        wireframeHelpers.set(child, overlays);
                     }
                 });
             } else {
                 // Remove wireframe overlays
-                wireframeHelpers.forEach((helper, mesh) => {
-                    mesh.remove(helper);
-                    helper.geometry.dispose();
-                    helper.material.dispose();
+                wireframeHelpers.forEach((overlays, mesh) => {
+                    overlays.forEach(overlay => {
+                        mesh.remove(overlay);
+                        if (overlay.geometry) overlay.geometry.dispose();
+                        if (overlay.material) overlay.material.dispose();
+                    });
                 });
                 wireframeHelpers.clear();
             }
