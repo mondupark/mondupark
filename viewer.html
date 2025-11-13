@@ -428,6 +428,9 @@
 
             // Start animation
             animate();
+
+            // Auto-load default model
+            loadModelFromURL('models/headTest.glb');
         }
 
         function setupNeutralLighting() {
@@ -569,6 +572,105 @@
             controls.update();
         }
 
+        function processLoadedModel(gltf) {
+            // Remove old model and clear materials
+            if (currentModel) {
+                scene.remove(currentModel);
+                disposeMaterials();
+            }
+
+            currentModel = gltf.scene;
+            originalMaterials.clear();
+
+            // Process materials with proper texture handling
+            currentModel.traverse((child) => {
+                if (child.isMesh) {
+                    // Clone and store original materials properly
+                    if (Array.isArray(child.material)) {
+                        const clonedMaterials = child.material.map(mat => mat.clone());
+                        originalMaterials.set(child, clonedMaterials);
+                    } else {
+                        originalMaterials.set(child, child.material.clone());
+                    }
+
+                    // Ensure proper PBR material setup
+                    const materials = Array.isArray(child.material) ? child.material : [child.material];
+                    materials.forEach(mat => {
+                        if (mat.isMeshStandardMaterial || mat.isMeshPhysicalMaterial) {
+                            // Ensure textures are properly configured
+                            if (mat.map) {
+                                mat.map.encoding = THREE.sRGBEncoding;
+                                mat.map.needsUpdate = true;
+                            }
+                            if (mat.normalMap) mat.normalMap.needsUpdate = true;
+                            if (mat.roughnessMap) mat.roughnessMap.needsUpdate = true;
+                            if (mat.metalnessMap) mat.metalnessMap.needsUpdate = true;
+                            if (mat.aoMap) mat.aoMap.needsUpdate = true;
+
+                            mat.envMapIntensity = 1.0;
+                            mat.needsUpdate = true;
+                        }
+
+                        // Ensure clean rendering
+                        mat.flatShading = false;
+                    });
+
+                    // Enable shadows
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+
+            scene.add(currentModel);
+
+            // Center and scale model
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 4 / maxDim;
+
+            currentModel.scale.multiplyScalar(scale);
+            currentModel.position.sub(center.multiplyScalar(scale));
+
+            // Update stats
+            updateStats(currentModel);
+
+            // Frame the model
+            frameModel();
+
+            // Apply current texture mode
+            if (textureMode === 'off') {
+                setTextureMode('off');
+            }
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('instructions').style.display = 'none';
+        }
+
+        function loadModelFromURL(url) {
+            document.getElementById('loading').style.display = 'block';
+            const loader = new THREE.GLTFLoader();
+
+            loader.load(
+                url,
+                function(gltf) {
+                    processLoadedModel(gltf);
+                    console.log(`Model loaded successfully from: ${url}`);
+                },
+                function(xhr) {
+                    const percentComplete = (xhr.loaded / xhr.total) * 100;
+                    console.log(`Loading: ${percentComplete.toFixed(2)}%`);
+                },
+                function(error) {
+                    console.error('Error loading model from URL:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    // Don't show alert for auto-load failure, just log it
+                    console.warn('Failed to auto-load default model. You can upload your own GLB/GLTF file.');
+                }
+            );
+        }
+
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -580,79 +682,7 @@
                 const loader = new THREE.GLTFLoader();
 
                 loader.parse(e.target.result, '', function(gltf) {
-                    // Remove old model and clear materials
-                    if (currentModel) {
-                        scene.remove(currentModel);
-                        disposeMaterials();
-                    }
-
-                    currentModel = gltf.scene;
-                    originalMaterials.clear();
-
-                    // Process materials with proper texture handling
-                    currentModel.traverse((child) => {
-                        if (child.isMesh) {
-                            // Clone and store original materials properly
-                            if (Array.isArray(child.material)) {
-                                const clonedMaterials = child.material.map(mat => mat.clone());
-                                originalMaterials.set(child, clonedMaterials);
-                            } else {
-                                originalMaterials.set(child, child.material.clone());
-                            }
-
-                            // Ensure proper PBR material setup
-                            const materials = Array.isArray(child.material) ? child.material : [child.material];
-                            materials.forEach(mat => {
-                                if (mat.isMeshStandardMaterial || mat.isMeshPhysicalMaterial) {
-                                    // Ensure textures are properly configured
-                                    if (mat.map) {
-                                        mat.map.encoding = THREE.sRGBEncoding;
-                                        mat.map.needsUpdate = true;
-                                    }
-                                    if (mat.normalMap) mat.normalMap.needsUpdate = true;
-                                    if (mat.roughnessMap) mat.roughnessMap.needsUpdate = true;
-                                    if (mat.metalnessMap) mat.metalnessMap.needsUpdate = true;
-                                    if (mat.aoMap) mat.aoMap.needsUpdate = true;
-
-                                    mat.envMapIntensity = 1.0;
-                                    mat.needsUpdate = true;
-                                }
-
-                                // Ensure clean rendering
-                                mat.flatShading = false;
-                            });
-
-                            // Enable shadows
-                            child.castShadow = true;
-                            child.receiveShadow = true;
-                        }
-                    });
-
-                    scene.add(currentModel);
-
-                    // Center and scale model
-                    const box = new THREE.Box3().setFromObject(currentModel);
-                    const center = box.getCenter(new THREE.Vector3());
-                    const size = box.getSize(new THREE.Vector3());
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    const scale = 4 / maxDim;
-
-                    currentModel.scale.multiplyScalar(scale);
-                    currentModel.position.sub(center.multiplyScalar(scale));
-
-                    // Update stats
-                    updateStats(currentModel);
-
-                    // Frame the model
-                    frameModel();
-
-                    // Apply current texture mode
-                    if (textureMode === 'off') {
-                        setTextureMode('off');
-                    }
-
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('instructions').style.display = 'none';
+                    processLoadedModel(gltf);
                 }, function(error) {
                     console.error('Error loading model:', error);
                     alert('Failed to load model. Please check if it is a GLB/GLTF file.');
