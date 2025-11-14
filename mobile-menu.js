@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const mobileSidebar = document.querySelector('.mobile-sidebar');
     const mobileOverlay = document.querySelector('.mobile-overlay');
+    const mobileCloseBtn = document.querySelector('.mobile-close-btn');
 
     if (!hamburger || !mobileSidebar || !mobileOverlay) {
         console.error('Mobile menu elements not found');
@@ -30,6 +31,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     mobileOverlay.addEventListener('click', toggleMenu);
+
+    // Close button in sidebar
+    if (mobileCloseBtn) {
+        mobileCloseBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMenu(e);
+        });
+    }
 
     // Close menu when clicking a link
     const mobileLinks = mobileSidebar.querySelectorAll('.nav-menu a');

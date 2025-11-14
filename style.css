@@ -689,15 +689,56 @@ footer p {
     padding: 18px 30px;
     border-bottom: 1px solid var(--border);
     font-size: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .mobile-sidebar .nav-menu a.active {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .mobile-sidebar .nav-menu a.active::after {
     display: none;
+}
+
+/* Mobile Sidebar Close Button */
+.mobile-close-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1600;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-close-btn::before,
+.mobile-close-btn::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background: var(--text);
+    border-radius: 3px;
+}
+
+.mobile-close-btn::before {
+    transform: rotate(45deg);
+}
+
+.mobile-close-btn::after {
+    transform: rotate(-45deg);
 }
 
 /* Mobile Overlay */
@@ -734,6 +775,7 @@ footer p {
 
     .nav-brand {
         font-size: 18px;
+        text-decoration: none;
     }
 
     .navbar .nav-menu {
