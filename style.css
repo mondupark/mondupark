@@ -131,6 +131,11 @@ body {
     background-clip: text;
 }
 
+.hero-subtitle-text {
+    font-size: 45px;
+    font-weight: 400;
+}
+
 .hero-subtitle {
     font-size: 20px;
     color: var(--text-secondary);
@@ -689,17 +694,11 @@ footer p {
     padding: 18px 30px;
     border-bottom: 1px solid var(--border);
     font-size: 16px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text);
 }
 
 .mobile-sidebar .nav-menu a.active {
-    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text);
 }
 
 .mobile-sidebar .nav-menu a.active::after {
@@ -801,7 +800,7 @@ footer p {
     }
 
     .hero-subtitle-text {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 400;
     }
 
