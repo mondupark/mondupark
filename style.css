@@ -366,34 +366,27 @@ body {
     padding: 60px 0;
 }
 
-.software-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
+.software-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
 }
 
-.software-item {
-    background: var(--surface);
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
+.software-name {
+    color: var(--text);
+    font-weight: 500;
 }
 
-.software-item:hover {
-    border-color: var(--primary);
-    transform: translateY(-5px);
-}
-
-.software-icon {
-    font-size: 48px;
-    margin-bottom: 15px;
-}
-
-.software-item h4 {
-    font-size: 16px;
+.software-separator {
     color: var(--text-secondary);
+}
+
+.software-more {
+    color: var(--text);
+    font-weight: 500;
 }
 
 /* Experience Section */
@@ -833,9 +826,18 @@ footer p {
         grid-template-columns: 1fr;
     }
 
-    .skills-grid,
-    .software-grid {
+    .skills-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .software-list {
+        flex-direction: column;
+        gap: 8px;
+        font-size: 16px;
+    }
+
+    .software-separator {
+        display: none;
     }
 
     .section-title {
