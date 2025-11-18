@@ -6,19 +6,35 @@
     <title>카트라이더 BT21 광고 - 3D Artist Portfolio</title>
     <link rel="stylesheet" href="../style.css">
     <style>
-        .project-hero-banner {
-            width: 100%;
-            height: 400px;
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+        .project-hero {
+            padding: 60px 0 40px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
         }
-        .project-hero-banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .project-title {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .project-meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .meta-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .meta-value {
+            font-size: 16px;
+            color: var(--text);
+            font-weight: 600;
         }
         .project-details {
             display: grid;
@@ -76,8 +92,8 @@
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
-            .project-hero-banner {
-                height: 250px;
+            .project-title {
+                font-size: 32px;
             }
         }
     </style>
@@ -115,17 +131,35 @@
     <!-- Mobile Overlay -->
     <div class="mobile-overlay"></div>
 
-    <div class="project-hero-banner">
-        <img src="../images/KART_stiil.png" alt="카트라이더 BT21">
-    </div>
+    <section class="project-hero">
+        <div class="container">
+            <h1 class="project-title gradient-text">카트라이더 BT21 (KartRider x BT21)</h1>
+            <p style="font-size: 18px; color: var(--text-secondary);">Commercial Animation</p>
+            <div class="project-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Production</span>
+                    <span class="meta-value">LOCUS Corporation</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Year</span>
+                    <span class="meta-value">2023</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Type</span>
+                    <span class="meta-value">Commercial Animation</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Status</span>
+                    <span class="meta-value status-tag status-released">Released</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section style="padding: 60px 0;">
         <div class="container">
-            <h1 class="gradient-text" style="font-size: 48px; margin-bottom: 20px;">카트라이더 BT21 (KartRider x BT21)</h1>
-            <p style="font-size: 20px; color: var(--text-secondary); margin-bottom: 10px;">Commercial</p>
-            <span class="status-tag status-released" style="font-size: 14px;">Released</span>
 
-            <h2 style="font-size: 32px; margin: 60px 0 30px;">About the Project</h2>
+            <h2 style="font-size: 32px; margin: 60px 0 30px;">Project Overview</h2>
             <div class="project-description">
                 <p>
                     KartRider x BT21 collaboration is a commercial project combining Nexon's racing game and LINE Friends' BT21 characters. As a lookdev artist, I was responsible for texturing and shading BT21 characters and themed vehicles. I worked according to brand guidelines using Substance Painter, Maya, and V-Ray, collaborating with Nexon concept artists.
@@ -187,6 +221,13 @@
                             • Commercial quality rendering
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <h2 style="font-size: 32px; margin: 60px 0 30px;">Gallery</h2>
+            <div class="project-gallery">
+                <div class="gallery-image">
+                    <img src="../images/KART_stiil.png" alt="KartRider x BT21 - Image 1">
                 </div>
             </div>
 
