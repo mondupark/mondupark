@@ -136,7 +136,7 @@ body {
 }
 
 .hero-subtitle-text {
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 500;
 }
 
@@ -1036,11 +1036,11 @@ footer p {
 
 /* Status Tags in Project Detail Pages (smaller) */
 .meta-value.status-tag {
-    padding: 2.25px 4.5px;
-    border-radius: 7.5px;
-    font-size: 4.5px;
-    letter-spacing: 0.2px;
-    margin-top: 3.5px;
+    padding: 4.5px 9px;
+    border-radius: 15px;
+    font-size: 9px;
+    letter-spacing: 0.375px;
+    margin-top: 7.5px;
 }
 
 .status-released {
