@@ -1061,6 +1061,29 @@ footer p {
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+/* Placeholder Cards */
+.placeholder-card {
+    cursor: default;
+    pointer-events: none;
+}
+
+.placeholder-card:hover {
+    transform: none;
+    border-color: var(--border);
+    box-shadow: none;
+}
+
+.placeholder-image {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.placeholder-card .work-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+}
+
 /* Responsive Works */
 @media (max-width: 768px) {
     .works-grid {
