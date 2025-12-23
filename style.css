@@ -1084,6 +1084,11 @@ footer p {
     min-height: 80px;
 }
 
+/* NDA Placeholder Images */
+.nda-placeholder {
+    background: var(--surface-light);
+}
+
 /* Responsive Works */
 @media (max-width: 768px) {
     .works-grid {
