@@ -52,7 +52,7 @@ This site is automatically deployed via GitHub Pages. Any changes pushed to the 
 
 ### Deployment URL
 ```
-https://dhpark9609-lang.github.io/3d-portfolio-viewer/
+https://dhpark9609-lang.github.io/mondupark/
 ```
 
 ## File Structure
