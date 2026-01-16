@@ -145,19 +145,19 @@ body {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary);
 }
 
 .hero-main-title {
     font-size: 80px;
+    color: #1A1D2E;
+    font-weight: 800;
 }
 
 .hero-subtitle-text {
     font-size: 24px;
     font-weight: 500;
+    color: #4A5568;
 }
 
 .hero-subtitle {
@@ -211,6 +211,20 @@ body {
 .btn-secondary:hover {
     background: rgba(45, 62, 143, 0.1);
     border-color: var(--primary-dark);
+}
+
+.btn-coral {
+    background: var(--accent);
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF;
+}
+
+.btn-coral:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.3);
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF;
 }
 
 /* Featured Section */
@@ -309,6 +323,7 @@ body {
 .page-header h1 {
     font-size: 48px;
     margin-bottom: 15px;
+    color: #2D3E8F;
 }
 
 .page-header p {
