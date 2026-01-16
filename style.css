@@ -11,7 +11,7 @@
     --primary: #2D3E8F;
     --primary-dark: #1F2D6B;
     --primary-light: #4A5AAE;
-    --secondary: #4A5AAE;
+    --secondary: #3D4E9F;
 
     /* Accent - 창의적이고 따뜻한 Coral */
     --accent: #FF6B6B;
@@ -110,7 +110,7 @@ body {
 /* Hero Section */
 .hero {
     padding: 120px 0;
-    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(74, 90, 174, 0.05));
+    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(61, 78, 159, 0.05));
     position: relative;
     overflow: hidden;
 }
@@ -285,7 +285,7 @@ body {
 .cta {
     padding: 80px 0;
     text-align: center;
-    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(74, 90, 174, 0.05));
+    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(61, 78, 159, 0.05));
 }
 
 .cta h2 {
@@ -303,7 +303,7 @@ body {
 .page-header {
     padding: 80px 0 40px;
     text-align: center;
-    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(74, 90, 174, 0.05));
+    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(61, 78, 159, 0.05));
 }
 
 .page-header h1 {
