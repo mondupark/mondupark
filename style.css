@@ -7,20 +7,37 @@
 
 :root {
     /* Light Theme Colors */
-    --primary: #5B6FEE;
-    --primary-dark: #4A5EDD;
-    --secondary: #6B7EEE;
-    --accent: #5B6FEE;
-    --background: #F8F9FA;
+    /* Primary - 신뢰감 있는 Deep Blue */
+    --primary: #2D3E8F;
+    --primary-dark: #1F2D6B;
+    --primary-light: #4A5AAE;
+    --secondary: #4A5AAE;
+
+    /* Accent - 창의적이고 따뜻한 Coral */
+    --accent: #FF6B6B;
+    --accent-hover: #FF5252;
+
+    /* Background */
+    --background: #FFFFFF;
     --surface: #FFFFFF;
     --surface-light: #F8F9FA;
+
+    /* Text - 강한 대비 */
     --text: #1A1D2E;
     --text-secondary: #4A5568;
+    --text-tertiary: #718096;
+
+    /* Border */
     --border: rgba(0, 0, 0, 0.1);
+
     /* Shadows */
-    --shadow-sm: 0 1px 3px rgba(45, 62, 143, 0.08);    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 8px 24px rgba(45, 62, 143, 0.12);}
-    --card-hover: 0 6px 16px rgba(255, 107, 107, 0.2);body {
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --card-hover: 0 6px 16px rgba(45, 62, 143, 0.2);
+}
+
+body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--background);
     color: var(--text);
@@ -93,7 +110,7 @@
 /* Hero Section */
 .hero {
     padding: 120px 0;
-    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(107, 126, 238, 0.05));
+    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(74, 90, 174, 0.05));
     position: relative;
     overflow: hidden;
 }
@@ -105,7 +122,7 @@
     right: -50%;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(91, 111, 238, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(45, 62, 143, 0.08) 0%, transparent 70%);
     animation: pulse 8s ease-in-out infinite;
 }
 
@@ -192,7 +209,7 @@
 }
 
 .btn-secondary:hover {
-    background: rgba(91, 111, 238, 0.1);
+    background: rgba(45, 62, 143, 0.1);
     border-color: var(--primary-dark);
 }
 
@@ -268,7 +285,7 @@
 .cta {
     padding: 80px 0;
     text-align: center;
-    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(107, 126, 238, 0.05));
+    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(74, 90, 174, 0.05));
 }
 
 .cta h2 {
@@ -286,7 +303,7 @@
 .page-header {
     padding: 80px 0 40px;
     text-align: center;
-    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(107, 126, 238, 0.05));
+    background: linear-gradient(135deg, rgba(45, 62, 143, 0.05), rgba(74, 90, 174, 0.05));
 }
 
 .page-header h1 {
@@ -618,8 +635,8 @@
 
 .tag {
     padding: 8px 16px;
-    background: rgba(91, 111, 238, 0.1);
-    border: 1px solid rgba(91, 111, 238, 0.3);
+    background: rgba(45, 62, 143, 0.1);
+    border: 1px solid rgba(45, 62, 143, 0.3);
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
@@ -978,7 +995,7 @@ footer p {
 .work-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(91, 111, 238, 0.9);
+    background: rgba(45, 62, 143, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
