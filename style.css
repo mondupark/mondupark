@@ -9,7 +9,7 @@
     /* Light Theme Colors */
     --primary: #5B6FEE;
     --primary-dark: #4A5EDD;
-    --secondary: #7B8FEE;
+    --secondary: #6B7EEE;
     --accent: #5B6FEE;
     --background: #F8F9FA;
     --surface: #FFFFFF;
@@ -98,7 +98,7 @@ body {
 /* Hero Section */
 .hero {
     padding: 120px 0;
-    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(139, 159, 255, 0.05));
+    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(107, 126, 238, 0.05));
     position: relative;
     overflow: hidden;
 }
@@ -178,13 +178,16 @@ body {
 
 .btn-primary {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #FFFFFF;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF;
 }
 
 .btn-primary:hover {
     background: linear-gradient(135deg, var(--primary-dark), var(--primary));
     transform: translateY(-2px);
     box-shadow: var(--card-hover);
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF;
 }
 
 .btn-secondary {
@@ -270,7 +273,7 @@ body {
 .cta {
     padding: 80px 0;
     text-align: center;
-    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(139, 159, 255, 0.05));
+    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(107, 126, 238, 0.05));
 }
 
 .cta h2 {
@@ -288,7 +291,7 @@ body {
 .page-header {
     padding: 80px 0 40px;
     text-align: center;
-    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(139, 159, 255, 0.05));
+    background: linear-gradient(135deg, rgba(91, 111, 238, 0.05), rgba(107, 126, 238, 0.05));
 }
 
 .page-header h1 {
