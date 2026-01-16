@@ -14,8 +14,8 @@
     --secondary: #3D4E9F;
 
     /* Accent - 창의적이고 따뜻한 Coral */
-    --accent: #FF6B6B;
-    --accent-hover: #FF5252;
+    --accent: #E67E73;
+    --accent-hover: #D86B60;
 
     /* Background */
     --background: #FFFFFF;
@@ -149,9 +149,10 @@ body {
 }
 
 .hero-main-title {
-    font-size: 80px;
+    font-size: 56px;
     color: #1A1D2E;
     font-weight: 800;
+    white-space: nowrap;
 }
 
 .hero-subtitle-text {
@@ -222,7 +223,7 @@ body {
 .btn-coral:hover {
     background: var(--accent-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.3);
+    box-shadow: 0 6px 16px rgba(230, 126, 115, 0.3);
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF;
 }
@@ -841,6 +842,7 @@ footer p {
 
     .hero-main-title {
         font-size: 45px;
+        white-space: normal;
     }
 
     .hero-subtitle-text {
