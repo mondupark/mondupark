@@ -111,7 +111,94 @@
             cursor: pointer;
         }
 
-        /* Mobile responsive adjustments */
+        /* Price highlight animation */
+        @keyframes highlight {
+            0% { background-color: transparent; }
+            50% { background-color: #FEF3C7; }
+            100% { background-color: transparent; }
+        }
+
+        .price-highlight {
+            animation: highlight 1s ease;
+        }
+
+        /* Mobile bottom quote panel */
+        .mobile-quote-panel {
+            display: none;
+        }
+
+        @media (max-width: 767px) {
+            .mobile-quote-panel {
+                display: block;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 2px solid #2D3E8F;
+                box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                padding: 12px 16px;
+            }
+
+            .mobile-quote-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .mobile-quote-modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1100;
+                padding: 20px;
+                overflow-y: auto;
+            }
+
+            .mobile-quote-modal.active {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-quote-content {
+                background: white;
+                border-radius: 12px;
+                padding: 24px;
+                max-width: 500px;
+                width: 100%;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .price-sidebar {
+                display: none;
+            }
+
+            .step-content {
+                min-height: 400px;
+                padding-bottom: 100px;
+            }
+        }
+
+        /* Tablet adjustments */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .lg\\:grid {
+                display: grid;
+                grid-template-columns: 60% 40%;
+            }
+
+            .price-sidebar {
+                position: relative;
+                top: 0;
+                max-height: none;
+            }
+        }
+
+        /* Desktop adjustments */
         @media (max-width: 1024px) {
             .price-sidebar {
                 position: relative;
@@ -120,9 +207,108 @@
                 margin-top: 30px;
             }
         }
+
+        /* Touch optimization */
+        @media (hover: none) and (pointer: coarse) {
+            .slider::-webkit-slider-thumb {
+                width: 28px;
+                height: 28px;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 28px;
+                height: 28px;
+            }
+
+            input[type="checkbox"],
+            input[type="radio"] {
+                min-width: 20px;
+                min-height: 20px;
+            }
+
+            button, .btn {
+                min-height: 44px;
+                padding: 12px 24px;
+            }
+
+            .service-card,
+            .complexity-card {
+                padding: 20px;
+            }
+        }
+
+        /* Smooth transitions */
+        .step-content {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .step-hidden {
+            opacity: 0;
+            transform: translateX(-20px);
+            display: none;
+        }
+
+        .step-visible {
+            opacity: 1;
+            transform: translateX(0);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading spinner */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Skip to content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #2D3E8F;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 10px;
+        }
+
+        /* Focus visible styles */
+        *:focus-visible {
+            outline: 2px solid #2D3E8F;
+            outline-offset: 2px;
+        }
+
+        /* Required field indicator */
+        .required::after {
+            content: '*';
+            color: #EF4444;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Skip to content link for accessibility -->
+    <a href="#calculator-main" class="skip-link">Skip to calculator</a>
+
     <nav class="navbar">
         <div class="container">
             <button class="hamburger">
@@ -158,7 +344,7 @@
     <!-- Mobile Overlay -->
     <div class="mobile-overlay"></div>
 
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <div id="calculator-main" class="container mx-auto px-4 py-8 max-w-7xl">
         <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold mb-4" style="color: #2D3E8F;">VTuber 3D Model Commission Calculator</h1>
@@ -891,6 +1077,46 @@
         </div>
     </div>
 
+    <!-- Mobile Bottom Quote Panel -->
+    <div id="mobileQuotePanel" class="mobile-quote-panel">
+        <div class="mobile-quote-header" onclick="toggleMobileQuote()" role="button" aria-label="View quote details" tabindex="0">
+            <div>
+                <div class="text-xs text-gray-600">Estimated Total</div>
+                <div class="text-lg font-bold" style="color: #2D3E8F;">
+                    $<span id="mobileminPrice">0</span> ~ $<span id="mobileMaxPrice">0</span>
+                </div>
+            </div>
+            <button class="text-blue-600 font-semibold" aria-label="Expand quote details">
+                <span id="expandIcon">▼</span> Details
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Quote Modal -->
+    <div id="mobileQuoteModal" class="mobile-quote-modal" onclick="closeMobileQuote(event)">
+        <div class="mobile-quote-content" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" style="color: #2D3E8F;">💰 Estimated Quote</h3>
+                <button onclick="closeMobileQuote()" class="text-gray-500 text-2xl" aria-label="Close quote details">×</button>
+            </div>
+            <div id="mobileBreakdown" class="space-y-2 text-sm mb-4">
+                <div class="text-gray-500 text-center py-4">
+                    Select options to see pricing
+                </div>
+            </div>
+            <div class="border-t-2 my-4"></div>
+            <div class="mb-4">
+                <div class="text-sm text-gray-600 mb-1">Estimated Total:</div>
+                <div class="text-3xl font-bold" style="color: #2D3E8F;">
+                    $<span id="mobileMinPriceModal">0</span> ~ $<span id="mobileMaxPriceModal">0</span>
+                </div>
+            </div>
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 text-xs text-gray-700">
+                ⚠️ Final price may vary ±10% after reference review
+            </div>
+        </div>
+    </div>
+
     <script src="mobile-menu.js"></script>
 
     <script>
@@ -1179,10 +1405,20 @@
             document.getElementById('minPrice').textContent = minPrice.toLocaleString();
             document.getElementById('maxPrice').textContent = maxPrice.toLocaleString();
             document.getElementById('priceTotal').classList.remove('hidden');
+
+            // Update mobile panels
+            document.getElementById('mobileminPrice').textContent = minPrice.toLocaleString();
+            document.getElementById('mobileMaxPrice').textContent = maxPrice.toLocaleString();
+            document.getElementById('mobileMinPriceModal').textContent = minPrice.toLocaleString();
+            document.getElementById('mobileMaxPriceModal').textContent = maxPrice.toLocaleString();
+            document.getElementById('mobileBreakdown').innerHTML = breakdown.join('');
         }
 
         function nextStep() {
             if (state.currentStep < state.totalSteps) {
+                // Save progress before moving
+                saveProgress();
+
                 // Hide current step
                 document.getElementById(`step${state.currentStep}`).classList.remove('step-visible');
                 document.getElementById(`step${state.currentStep}`).classList.add('step-hidden');
@@ -1214,6 +1450,9 @@
 
         function previousStep() {
             if (state.currentStep > 1) {
+                // Save progress before moving
+                saveProgress();
+
                 // Hide current step
                 document.getElementById(`step${state.currentStep}`).classList.remove('step-visible');
                 document.getElementById(`step${state.currentStep}`).classList.add('step-hidden');
@@ -1582,9 +1821,413 @@ ${formData.referenceUrls ? '**🔗 URLs:**\n' + formData.referenceUrls : ''}
             }
         }
 
+        // Mobile Quote Panel Functions
+        function toggleMobileQuote() {
+            const modal = document.getElementById('mobileQuoteModal');
+            const icon = document.getElementById('expandIcon');
+            modal.classList.toggle('active');
+            icon.textContent = modal.classList.contains('active') ? '▲' : '▼';
+        }
+
+        function closeMobileQuote(event) {
+            if (event && event.target.id !== 'mobileQuoteModal') return;
+            const modal = document.getElementById('mobileQuoteModal');
+            const icon = document.getElementById('expandIcon');
+            modal.classList.remove('active');
+            icon.textContent = '▼';
+        }
+
+        // LocalStorage Progress Saving
+        function saveProgress() {
+            try {
+                const progressData = {
+                    currentStep: state.currentStep,
+                    selections: state.selections,
+                    uploadedFilesCount: state.uploadedFiles.length,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('vtuberQuoteProgress', JSON.stringify(progressData));
+            } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+        }
+
+        function loadProgress() {
+            try {
+                const saved = localStorage.getItem('vtuberQuoteProgress');
+                if (!saved) return null;
+
+                const data = JSON.parse(saved);
+                const hoursSinceLastSave = (Date.now() - data.timestamp) / (1000 * 60 * 60);
+
+                // Only restore if less than 24 hours old
+                if (hoursSinceLastSave < 24) {
+                    return data;
+                }
+
+                // Clear old data
+                localStorage.removeItem('vtuberQuoteProgress');
+                return null;
+            } catch (error) {
+                console.error('Error loading progress:', error);
+                return null;
+            }
+        }
+
+        function showRestorePrompt(savedData) {
+            const message = `💾 Previous progress found from ${new Date(savedData.timestamp).toLocaleString()}.\n\nWould you like to continue where you left off?`;
+            if (confirm(message)) {
+                restoreProgress(savedData);
+            } else {
+                localStorage.removeItem('vtuberQuoteProgress');
+            }
+        }
+
+        function restoreProgress(savedData) {
+            // Restore selections
+            Object.assign(state.selections, savedData.selections);
+
+            // Restore step
+            state.currentStep = savedData.currentStep;
+
+            // Hide opening message and show calculator
+            document.getElementById('openingMessage').classList.add('hidden');
+            document.getElementById('calculatorContainer').classList.remove('hidden');
+
+            // Navigate to saved step
+            for (let i = 1; i <= state.totalSteps; i++) {
+                const stepEl = document.getElementById(`step${i}`);
+                if (i === state.currentStep) {
+                    stepEl.classList.remove('step-hidden');
+                    stepEl.classList.add('step-visible');
+                } else {
+                    stepEl.classList.remove('step-visible');
+                    stepEl.classList.add('step-hidden');
+                }
+            }
+
+            // Update progress bar
+            updateProgress();
+
+            // Restore UI states
+            restoreUIStates();
+
+            // Update price
+            updatePrice();
+
+            // Enable/disable navigation buttons
+            document.getElementById('prevBtn').disabled = state.currentStep === 1;
+            document.getElementById('nextBtn').disabled = false;
+
+            alert('✅ Progress restored! You can continue from where you left off.');
+        }
+
+        function restoreUIStates() {
+            const s = state.selections;
+
+            // Restore service selection
+            if (s.service) {
+                const serviceCard = document.querySelector(`.service-card input[value="${s.service}"]`)?.closest('.service-card');
+                if (serviceCard) serviceCard.classList.add('selected');
+            }
+
+            // Restore body type
+            if (s.bodyType) {
+                const bodyRadio = document.querySelector(`input[name="bodyType"][value="${s.bodyType}"]`);
+                if (bodyRadio) bodyRadio.checked = true;
+            }
+
+            // Restore complexity
+            if (s.complexity) {
+                const complexityCard = document.querySelector(`.complexity-card`);
+                // You could add more specific restoration here
+            }
+
+            // Restore sliders
+            ['additionalExpressions', 'customExpressions', 'handPoses', 'outfits', 'hairstyles', 'toggleAccessories'].forEach(id => {
+                const slider = document.getElementById(id);
+                if (slider && s[id]) {
+                    slider.value = s[id];
+                    updateSlider(id, prices[id], slider.max);
+                }
+            });
+
+            // Restore checkboxes
+            ['animalParts', 'wings', 'horns', 'glowEffects', 'handTracking', 'fullBodyTracking',
+             'advancedLipsync', 'iphoneArkit', 'blenderSource', 'fbxPsdSource', 'completeSource',
+             'privateCommission'].forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox && s[id]) {
+                    checkbox.checked = true;
+                }
+            });
+
+            // Restore radio buttons
+            if (s.commercialRights) {
+                const radio = document.querySelector(`input[name="commercialRights"][value="${s.commercialRights}"]`);
+                if (radio) radio.checked = true;
+            }
+            if (s.timeline) {
+                const radio = document.querySelector(`input[name="timeline"][value="${s.timeline}"]`);
+                if (radio) radio.checked = true;
+            }
+            if (s.revisions) {
+                const radio = document.querySelector(`input[name="revisions"][value="${s.revisions}"]`);
+                if (radio) radio.checked = true;
+            }
+
+            // Restore text inputs
+            if (s.referenceUrls) document.getElementById('referenceUrls').value = s.referenceUrls;
+            if (s.additionalNotes) {
+                document.getElementById('additionalNotes').value = s.additionalNotes;
+                updateCharCount();
+            }
+            if (s.contactName) document.getElementById('contactName').value = s.contactName;
+            if (s.contactEmail) document.getElementById('contactEmail').value = s.contactEmail;
+            if (s.contactDiscord) document.getElementById('contactDiscord').value = s.contactDiscord;
+            if (s.privacyAgree) document.getElementById('privacyAgree').checked = true;
+        }
+
+        // Enhanced error handling for submissions
+        async function sendToDiscord(formData) {
+            const webhookUrl = ''; // Set your Discord webhook URL here
+
+            if (!webhookUrl) {
+                console.log('Discord webhook not configured. Skipping Discord notification.');
+                return { success: true, skipped: true };
+            }
+
+            try {
+                const s = formData.selections;
+                const serviceTypes = { full: 'Full Package ($8,000)', custom: 'Custom 3D Model ($4,000)', vroid: 'VRoid Customization ($1,500)', rigging: 'Rigging Only ($800)' };
+                const bodyTypes = { fullbody: 'Fullbody (×1.0)', halfbody: 'Halfbody (×0.7)', chibi: 'Chibi (×0.6)' };
+                const complexityTypes = { simple: 'Simple (×1.0)', standard: 'Standard (×1.4)', complex: 'Complex (×1.8)' };
+                const rightsTypes = { personal: 'Personal Use Only', commercial: 'Commercial Use', merchandise: 'Merchandise Rights', full: 'Full Rights Transfer' };
+                const timelineTypes = { relaxed: 'Relaxed (10-12 weeks)', standard: 'Standard (8-10 weeks)', rush: 'Rush (6 weeks)', express: 'Express (4 weeks)' };
+                const revisionTypes = { standard: 'Standard (1 per stage)', extended: 'Extended (3 per stage)', unlimited: 'Unlimited' };
+
+                let addons = [];
+                if (s.additionalExpressions > 0) addons.push(`• Additional Expressions: ${s.additionalExpressions} (+$${s.additionalExpressions * 50})`);
+                if (s.customExpressions > 0) addons.push(`• Custom Expressions: ${s.customExpressions} (+$${s.customExpressions * 80})`);
+                if (s.handPoses > 0) addons.push(`• Hand Poses: ${s.handPoses} (+$${s.handPoses * 100})`);
+                if (s.outfits > 0) addons.push(`• Additional Outfits: ${s.outfits} (+$${s.outfits * 600})`);
+                if (s.hairstyles > 0) addons.push(`• Additional Hairstyles: ${s.hairstyles} (+$${s.hairstyles * 350})`);
+                if (s.toggleAccessories > 0) addons.push(`• Toggle Accessories: ${s.toggleAccessories} (+$${s.toggleAccessories * 120})`);
+                if (s.animalParts) addons.push('• Animal Ears + Tail (+$250)');
+                if (s.wings) addons.push('• Wings (+$300)');
+                if (s.horns) addons.push('• Horns/Antennae (+$180)');
+                if (s.glowEffects) addons.push('• Glow Effects (+$200)');
+                if (s.handTracking) addons.push('• Hand Tracking Support (+$350)');
+                if (s.fullBodyTracking) addons.push('• Full Body Tracking (+$500)');
+                if (s.advancedLipsync) addons.push('• Advanced Lipsync (10 visemes) (+$180)');
+                if (s.iphoneArkit) addons.push('• iPhone ARKit Facial Tracking (+$400)');
+
+                let sourceFiles = [];
+                if (s.blenderSource) sourceFiles.push('• Blender Source Files (+$350)');
+                if (s.fbxPsdSource) sourceFiles.push('• FBX + PSD Source (+$280)');
+                if (s.completeSource) sourceFiles.push('• Complete Source Package (+$600)');
+
+                const message = {
+                    content: `🎨 **New VTuber Commission Inquiry!**
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**👤 Client:** ${formData.contact.name}
+**📧 Email:** ${formData.contact.email}
+**💬 Discord:** ${formData.contact.discord}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📊 Selected Options:**
+
+• **Service:** ${serviceTypes[s.service]}
+• **Body Type:** ${bodyTypes[s.bodyType]}
+• **Complexity:** ${complexityTypes[s.complexity]}
+• **Platform:** VRM Standard
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**✨ Add-ons:**
+${addons.length > 0 ? addons.join('\n') : 'None'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📁 Source Files:**
+${sourceFiles.length > 0 ? sourceFiles.join('\n') : 'Standard only (VRM, Unity, PNG)'}
+
+**⚖️ Rights:** ${rightsTypes[s.commercialRights]}
+**⏱️ Timeline:** ${timelineTypes[s.timeline]}
+**🔄 Revisions:** ${revisionTypes[s.revisions]}
+**🔒 Private:** ${s.privateCommission ? '✓' : '✗'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**💰 Estimated Quote:** $${formData.pricing.minPrice.toLocaleString()} ~ $${formData.pricing.maxPrice.toLocaleString()}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📎 References:** ${formData.files.length} images attached
+${formData.referenceUrls ? '**🔗 URLs:**\n' + formData.referenceUrls : ''}
+
+**💬 Additional Notes:**
+"${formData.additionalNotes}"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📅 Inquiry Time:** ${formData.timestamp}`
+                };
+
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(message)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Discord webhook failed: ${response.status}`);
+                }
+
+                return { success: true };
+            } catch (error) {
+                console.error('Discord send error:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function sendConfirmationEmail(formData) {
+            const serviceId = '';
+            const templateId = '';
+            const publicKey = '';
+
+            if (!serviceId || !templateId || !publicKey) {
+                console.log('EmailJS not configured. Skipping confirmation email.');
+                return { success: true, skipped: true };
+            }
+
+            try {
+                const s = formData.selections;
+                const serviceTypes = { full: 'Full Package', custom: 'Custom 3D Model', vroid: 'VRoid Customization', rigging: 'Rigging Only' };
+
+                const emailData = {
+                    to_email: formData.contact.email,
+                    to_name: formData.contact.name,
+                    service_type: serviceTypes[s.service],
+                    body_type: s.bodyType,
+                    complexity: s.complexity,
+                    min_price: formData.pricing.minPrice.toLocaleString(),
+                    max_price: formData.pricing.maxPrice.toLocaleString(),
+                    reply_to: 'dhpark9609@gmail.com'
+                };
+
+                if (typeof emailjs === 'undefined') {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                    await new Promise((resolve, reject) => {
+                        script.onload = () => {
+                            emailjs.init(publicKey);
+                            emailjs.send(serviceId, templateId, emailData)
+                                .then(resolve)
+                                .catch(reject);
+                        };
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                } else {
+                    await emailjs.send(serviceId, templateId, emailData);
+                }
+
+                return { success: true };
+            } catch (error) {
+                console.error('Email send error:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        // Enhanced submitForm with better error handling
+        async function submitForm() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="inline-block animate-spin">⏳</span> Sending...';
+
+            try {
+                const formData = collectFormData();
+
+                // Try to send to Discord
+                const discordResult = await sendToDiscord(formData);
+
+                // Try to send confirmation email
+                const emailResult = await sendConfirmationEmail(formData);
+
+                // Determine success message
+                let successMessage = '✅ Your inquiry has been received!';
+                if (emailResult.success && !emailResult.skipped) {
+                    successMessage += '\n\nPlease check your email for confirmation.';
+                }
+                successMessage += '\n\nI\'ll review your request and get back to you within 1-2 business days.';
+
+                // Show warnings if any service failed
+                if (!discordResult.success || !emailResult.success) {
+                    successMessage += '\n\n⚠️ Note: Some notifications may not have been sent, but your request was saved.';
+                }
+
+                alert(successMessage);
+
+                // Clear localStorage progress
+                localStorage.removeItem('vtuberQuoteProgress');
+
+                // Reset and go back to step 1
+                window.location.reload();
+
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert('❌ Something went wrong. Please try again or email us directly at dhpark9609@gmail.com\n\nError: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '📨 Send Quote Request';
+            }
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             console.log('VTuber Calculator initialized - 16 steps');
+
+            // Check for saved progress
+            const savedProgress = loadProgress();
+            if (savedProgress) {
+                showRestorePrompt(savedProgress);
+            }
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                // Escape key closes mobile modal
+                if (e.key === 'Escape') {
+                    closeMobileQuote();
+                }
+
+                // Arrow keys for navigation (when not in input fields)
+                if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                    if (e.key === 'ArrowRight') {
+                        const nextBtn = document.getElementById('nextBtn');
+                        if (!nextBtn.disabled && !nextBtn.classList.contains('hidden')) {
+                            nextStep();
+                        }
+                    } else if (e.key === 'ArrowLeft') {
+                        const prevBtn = document.getElementById('prevBtn');
+                        if (!prevBtn.disabled) {
+                            previousStep();
+                        }
+                    }
+                }
+            });
+
+            // Make mobile quote panel keyboard accessible
+            const mobileHeader = document.querySelector('.mobile-quote-header');
+            if (mobileHeader) {
+                mobileHeader.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleMobileQuote();
+                    }
+                });
+            }
         });
     </script>
 </body>
