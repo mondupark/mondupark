@@ -1433,8 +1433,11 @@
 
                 // Disable next button until selection is made
                 if (state.currentStep < state.totalSteps) {
-                    // Auto-enable for steps that don't require selection
-                    if ([3, 5, 6, 7, 8, 9, 10, 14, 15].includes(state.currentStep)) {
+                    // Auto-enable for steps that don't require selection or have default values
+                    // Step 3 (Platform - info only), 5 (What's Included - info only)
+                    // Step 6-10 (Optional sliders/checkboxes), 11-13 (Radio with defaults)
+                    // Step 14 (Confidentiality - optional), 15 (References - optional)
+                    if ([3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].includes(state.currentStep)) {
                         document.getElementById('nextBtn').disabled = false;
                     } else {
                         document.getElementById('nextBtn').disabled = true;
