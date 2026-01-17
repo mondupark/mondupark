@@ -127,7 +127,31 @@
             display: none;
         }
 
-        @media (max-width: 767px) {
+        .mobile-quote-modal {
+            display: none;
+        }
+
+        /* Desktop (1024px and above): Hide mobile elements */
+        @media (min-width: 1024px) {
+            .mobile-quote-panel {
+                display: none !important;
+            }
+
+            .mobile-quote-modal {
+                display: none !important;
+            }
+
+            .mobile-quote-modal.active {
+                display: none !important;
+            }
+        }
+
+        /* Mobile/Tablet (below 1024px): Hide desktop sidebar, show mobile panel */
+        @media (max-width: 1023px) {
+            .price-sidebar {
+                display: none !important;
+            }
+
             .mobile-quote-panel {
                 display: block;
                 position: fixed;
@@ -148,20 +172,16 @@
                 cursor: pointer;
             }
 
-            .mobile-quote-modal {
-                display: none;
+            .mobile-quote-modal.active {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 position: fixed;
                 inset: 0;
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 1100;
                 padding: 20px;
                 overflow-y: auto;
-            }
-
-            .mobile-quote-modal.active {
-                display: flex;
-                align-items: center;
-                justify-content: center;
             }
 
             .mobile-quote-content {
@@ -174,13 +194,15 @@
                 overflow-y: auto;
             }
 
-            .price-sidebar {
-                display: none;
+            .step-content {
+                padding-bottom: 100px;
             }
+        }
 
+        /* Mobile specific adjustments */
+        @media (max-width: 767px) {
             .step-content {
                 min-height: 400px;
-                padding-bottom: 100px;
             }
         }
 
@@ -188,23 +210,7 @@
         @media (min-width: 768px) and (max-width: 1023px) {
             .lg\\:grid {
                 display: grid;
-                grid-template-columns: 60% 40%;
-            }
-
-            .price-sidebar {
-                position: relative;
-                top: 0;
-                max-height: none;
-            }
-        }
-
-        /* Desktop adjustments */
-        @media (max-width: 1024px) {
-            .price-sidebar {
-                position: relative;
-                top: 0;
-                max-height: none;
-                margin-top: 30px;
+                grid-template-columns: 100%;
             }
         }
 
