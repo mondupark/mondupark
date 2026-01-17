@@ -75,6 +75,42 @@
             accent-color: #2D3E8F;
         }
 
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2D3E8F;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2D3E8F;
+            cursor: pointer;
+        }
+
         /* Mobile responsive adjustments */
         @media (max-width: 1024px) {
             .price-sidebar {
@@ -126,7 +162,7 @@
         <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold mb-4" style="color: #2D3E8F;">VTuber 3D Model Commission Calculator</h1>
-            <p class="text-lg text-gray-600">Get your custom quote in just 5 simple steps</p>
+            <p class="text-lg text-gray-600">Get your custom quote in just 14 simple steps</p>
         </div>
 
         <!-- Opening Message -->
@@ -148,11 +184,11 @@
             <!-- Progress Indicator -->
             <div class="bg-white rounded-xl shadow-md p-6 mb-6">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm font-semibold" style="color: #2D3E8F;">Step <span id="currentStep">1</span> / 5</span>
+                    <span class="text-sm font-semibold" style="color: #2D3E8F;">Step <span id="currentStep">1</span> / 14</span>
                     <span class="text-sm text-gray-600" id="stepTitle">Service Type</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-3">
-                    <div id="progressBar" class="progress-bar h-3 rounded-full" style="background: #2D3E8F; width: 20%;"></div>
+                    <div id="progressBar" class="progress-bar h-3 rounded-full" style="background: #2D3E8F; width: 7.14%;"></div>
                 </div>
             </div>
 
@@ -249,16 +285,8 @@
                                 </ul>
                             </div>
 
-                            <div class="border-2 rounded-lg p-6">
-                                <h3 class="font-bold text-lg mb-4" style="color: #2D3E8F;">Additional Options</h3>
-                                <label class="checkbox-option flex items-start p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
-                                    <input type="checkbox" id="commercialRights" onchange="toggleCommercialRights()" class="mr-4 mt-1 w-5 h-5">
-                                    <div>
-                                        <div class="font-bold">Commercial Usage Rights</div>
-                                        <div class="text-gray-600 text-sm">License for commercial streaming and content creation</div>
-                                        <div class="text-coral-500 font-semibold mt-1">+20%</div>
-                                    </div>
-                                </label>
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-sm text-gray-700">
+                                💡 Commercial rights and additional platform options are available in the following steps.
                             </div>
                         </div>
 
@@ -329,14 +357,410 @@
                                 </div>
 
                                 <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-sm text-gray-700">
-                                    💡 ARKit facial tracking is available as an add-on option in the next steps.
+                                    💡 Additional options like ARKit tracking, extra expressions, and source files are available in the following steps.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Expressions & Emotes -->
+                        <div id="step6" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Expressions & Emotes</h2>
+
+                            <div class="space-y-6">
+                                <!-- Additional Expressions -->
+                                <div class="border-2 rounded-lg p-6">
+                                    <label class="font-bold text-lg mb-4 block" style="color: #2D3E8F;">Additional Expressions ($50/each)</label>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-gray-700">Count: <span id="additionalExpressionsCount" class="font-bold">0</span></span>
+                                        <span class="font-bold" style="color: #E67E73;">+$<span id="additionalExpressionsPrice">0</span></span>
+                                    </div>
+                                    <input type="range" min="0" max="20" value="0" class="slider" id="additionalExpressions" oninput="updateSlider('additionalExpressions', 50, 20)">
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>0</span>
+                                        <span>20</span>
+                                    </div>
                                 </div>
 
-                                <div class="text-center mt-8">
-                                    <button onclick="finishCalculator()" class="px-8 py-4 text-white rounded-lg font-bold text-lg hover:opacity-90 transition" style="background: #E67E73;">
-                                        View Final Quote
-                                    </button>
+                                <!-- Custom Expressions -->
+                                <div class="border-2 rounded-lg p-6">
+                                    <label class="font-bold text-lg mb-4 block" style="color: #2D3E8F;">Custom Expressions ($80/each)</label>
+                                    <p class="text-sm text-gray-600 mb-4">Specific requests like crying, blushing, etc.</p>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-gray-700">Count: <span id="customExpressionsCount" class="font-bold">0</span></span>
+                                        <span class="font-bold" style="color: #E67E73;">+$<span id="customExpressionsPrice">0</span></span>
+                                    </div>
+                                    <input type="range" min="0" max="10" value="0" class="slider" id="customExpressions" oninput="updateSlider('customExpressions', 80, 10)">
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>0</span>
+                                        <span>10</span>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 7: Hand Poses -->
+                        <div id="step7" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Hand Poses</h2>
+
+                            <div class="border-2 rounded-lg p-6">
+                                <label class="font-bold text-lg mb-4 block" style="color: #2D3E8F;">Additional Hand Poses ($100/each)</label>
+                                <p class="text-sm text-gray-600 mb-4">Beyond the standard open/closed hands</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-gray-700">Count: <span id="handPosesCount" class="font-bold">0</span></span>
+                                    <span class="font-bold" style="color: #E67E73;">+$<span id="handPosesPrice">0</span></span>
+                                </div>
+                                <input type="range" min="0" max="10" value="0" class="slider" id="handPoses" oninput="updateSlider('handPoses', 100, 10)">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>0</span>
+                                    <span>10</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 8: Outfits & Hair -->
+                        <div id="step8" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Outfits & Hair</h2>
+
+                            <div class="space-y-6">
+                                <!-- Additional Outfits -->
+                                <div class="border-2 rounded-lg p-6">
+                                    <label class="font-bold text-lg mb-4 block" style="color: #2D3E8F;">Additional Outfits ($600/each)</label>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-gray-700">Count: <span id="outfitsCount" class="font-bold">0</span></span>
+                                        <span class="font-bold" style="color: #E67E73;">+$<span id="outfitsPrice">0</span></span>
+                                    </div>
+                                    <input type="range" min="0" max="3" value="0" class="slider" id="outfits" oninput="updateSlider('outfits', 600, 3)">
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>0</span>
+                                        <span>3</span>
+                                    </div>
+                                </div>
+
+                                <!-- Additional Hairstyles -->
+                                <div class="border-2 rounded-lg p-6">
+                                    <label class="font-bold text-lg mb-4 block" style="color: #2D3E8F;">Additional Hairstyles ($350/each)</label>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-gray-700">Count: <span id="hairstylesCount" class="font-bold">0</span></span>
+                                        <span class="font-bold" style="color: #E67E73;">+$<span id="hairstylesPrice">0</span></span>
+                                    </div>
+                                    <input type="range" min="0" max="3" value="0" class="slider" id="hairstyles" oninput="updateSlider('hairstyles', 350, 3)">
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>0</span>
+                                        <span>3</span>
+                                    </div>
+                                </div>
+
+                                <!-- Toggle Accessories -->
+                                <div class="border-2 rounded-lg p-6">
+                                    <label class="font-bold text-lg mb-4 block" style="color: #2D3E8F;">Toggle Accessories ($120/each)</label>
+                                    <p class="text-sm text-gray-600 mb-4">Items that can be turned on/off (glasses, hats, etc.)</p>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-gray-700">Count: <span id="toggleAccessoriesCount" class="font-bold">0</span></span>
+                                        <span class="font-bold" style="color: #E67E73;">+$<span id="toggleAccessoriesPrice">0</span></span>
+                                    </div>
+                                    <input type="range" min="0" max="5" value="0" class="slider" id="toggleAccessories" oninput="updateSlider('toggleAccessories', 120, 5)">
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>0</span>
+                                        <span>5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 9: Special Parts & Tracking -->
+                        <div id="step9" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Special Parts & Tracking</h2>
+
+                            <div class="space-y-6">
+                                <!-- Special Parts -->
+                                <div class="border-2 rounded-lg p-6">
+                                    <h3 class="font-bold text-lg mb-4" style="color: #2D3E8F;">Special Parts</h3>
+                                    <div class="space-y-3">
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="animalParts" onchange="updateCheckbox('animalParts', 250)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">Animal Ears + Tail</div>
+                                                <div class="text-sm text-gray-600">Includes rigging and physics</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$250</div>
+                                        </label>
+
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="wings" onchange="updateCheckbox('wings', 300)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">Wings</div>
+                                                <div class="text-sm text-gray-600">Angel, demon, or fairy wings</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$300</div>
+                                        </label>
+
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="horns" onchange="updateCheckbox('horns', 180)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">Horns/Antennae</div>
+                                                <div class="text-sm text-gray-600">Custom horn design</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$180</div>
+                                        </label>
+
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="glowEffects" onchange="updateCheckbox('glowEffects', 200)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">Glow Effects</div>
+                                                <div class="text-sm text-gray-600">Emissive textures and materials</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$200</div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Tracking & Technical -->
+                                <div class="border-2 rounded-lg p-6">
+                                    <h3 class="font-bold text-lg mb-4" style="color: #2D3E8F;">Tracking & Technical</h3>
+                                    <div class="space-y-3">
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="handTracking" onchange="updateCheckbox('handTracking', 350)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">Hand Tracking Support</div>
+                                                <div class="text-sm text-gray-600">Leap Motion / VR controller support</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$350</div>
+                                        </label>
+
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="fullBodyTracking" onchange="updateCheckbox('fullBodyTracking', 500)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">Full Body Tracking</div>
+                                                <div class="text-sm text-gray-600">Optimized for Vive trackers</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$500</div>
+                                        </label>
+
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="advancedLipsync" onchange="updateCheckbox('advancedLipsync', 180)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">Advanced Lipsync</div>
+                                                <div class="text-sm text-gray-600">10 visemes for realistic speech</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$180</div>
+                                        </label>
+
+                                        <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <input type="checkbox" id="iphoneArkit" onchange="updateCheckbox('iphoneArkit', 400)" class="mr-4 mt-1 w-5 h-5">
+                                            <div class="flex-1">
+                                                <div class="font-bold">iPhone ARKit Facial Tracking</div>
+                                                <div class="text-sm text-gray-600">52 ARKit blendshapes + iFacialMocap / VSeeFace compatibility</div>
+                                            </div>
+                                            <div class="font-semibold" style="color: #E67E73;">+$400</div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 10: Source Files -->
+                        <div id="step10" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Source Files</h2>
+
+                            <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6 mb-6">
+                                <h3 class="font-bold text-lg mb-4" style="color: #2D3E8F;">✅ Included as Standard</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-center"><span class="text-green-600 mr-2">✓</span> VRM File</li>
+                                    <li class="flex items-center"><span class="text-green-600 mr-2">✓</span> Unity Package</li>
+                                    <li class="flex items-center"><span class="text-green-600 mr-2">✓</span> Texture PNG</li>
+                                </ul>
+                            </div>
+
+                            <div class="border-2 rounded-lg p-6">
+                                <h3 class="font-bold text-lg mb-4" style="color: #2D3E8F;">Additional Source Files</h3>
+                                <div class="space-y-3">
+                                    <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <input type="checkbox" id="blenderSource" onchange="updateCheckbox('blenderSource', 350)" class="mr-4 mt-1 w-5 h-5">
+                                        <div class="flex-1">
+                                            <div class="font-bold">Blender Source Files</div>
+                                            <div class="text-sm text-gray-600">.blend files with full editing capability</div>
+                                        </div>
+                                        <div class="font-semibold" style="color: #E67E73;">+$350</div>
+                                    </label>
+
+                                    <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <input type="checkbox" id="fbxPsdSource" onchange="updateCheckbox('fbxPsdSource', 280)" class="mr-4 mt-1 w-5 h-5">
+                                        <div class="flex-1">
+                                            <div class="font-bold">FBX + PSD Source</div>
+                                            <div class="text-sm text-gray-600">Mesh and layered texture files</div>
+                                        </div>
+                                        <div class="font-semibold" style="color: #E67E73;">+$280</div>
+                                    </label>
+
+                                    <label class="checkbox-option flex items-start p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <input type="checkbox" id="completeSource" onchange="updateCheckbox('completeSource', 600)" class="mr-4 mt-1 w-5 h-5">
+                                        <div class="flex-1">
+                                            <div class="font-bold">Complete Source File Package</div>
+                                            <div class="text-sm text-gray-600">All source files + project files</div>
+                                        </div>
+                                        <div class="font-semibold" style="color: #E67E73;">+$600</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 11: Commercial Rights -->
+                        <div id="step11" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Commercial Rights</h2>
+
+                            <div class="space-y-4">
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="commercialRights" value="personal" onchange="selectCommercialRights('personal', 1.0)" class="mr-4 mt-1 w-5 h-5" checked>
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Personal Use Only</div>
+                                        <div class="text-sm text-gray-600">Non-monetized content only</div>
+                                    </div>
+                                    <div class="text-gray-500">×1.0</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="commercialRights" value="commercial" onchange="selectCommercialRights('commercial', 1.2)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Commercial Use</div>
+                                        <div class="text-sm text-gray-600">Monetization allowed (streaming, videos, etc.)</div>
+                                    </div>
+                                    <div class="font-bold" style="color: #E67E73;">×1.2</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="commercialRights" value="merchandise" onchange="selectCommercialRights('merchandise', 1.3)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Merchandise Rights</div>
+                                        <div class="text-sm text-gray-600">Includes physical/digital product sales</div>
+                                    </div>
+                                    <div class="font-bold" style="color: #E67E73;">×1.3</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="commercialRights" value="full" onchange="selectCommercialRights('full', 1.5)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Full Rights Transfer</div>
+                                        <div class="text-sm text-gray-600">Complete ownership (requires source files)</div>
+                                    </div>
+                                    <div class="font-bold" style="color: #E67E73;">×1.5</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Step 12: Delivery Timeline -->
+                        <div id="step12" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Delivery Timeline</h2>
+
+                            <div class="space-y-4">
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="timeline" value="relaxed" onchange="selectTimeline('relaxed', 0.95)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Relaxed (10-12 weeks)</div>
+                                        <div class="text-sm text-gray-600">No rush, flexible schedule</div>
+                                    </div>
+                                    <div class="font-bold text-green-600">×0.95</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="timeline" value="standard" onchange="selectTimeline('standard', 1.0)" class="mr-4 mt-1 w-5 h-5" checked>
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Standard (8-10 weeks)</div>
+                                        <div class="text-sm text-gray-600">Normal production pace</div>
+                                    </div>
+                                    <div class="text-gray-500">×1.0</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="timeline" value="rush" onchange="selectTimeline('rush', 1.3)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Rush (6 weeks)</div>
+                                        <div class="text-sm text-gray-600">Priority production</div>
+                                    </div>
+                                    <div class="font-bold" style="color: #E67E73;">×1.3</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="timeline" value="express" onchange="selectTimeline('express', 1.6)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Express (4 weeks)</div>
+                                        <div class="text-sm text-gray-600">Maximum priority</div>
+                                    </div>
+                                    <div class="font-bold" style="color: #E67E73;">×1.6</div>
+                                </label>
+                            </div>
+
+                            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 text-sm text-gray-700 mt-6">
+                                ⚠️ Rush and Express timelines are subject to availability
+                            </div>
+                        </div>
+
+                        <!-- Step 13: Revision Rounds -->
+                        <div id="step13" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Revision Rounds</h2>
+
+                            <div class="space-y-4">
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="revisions" value="standard" onchange="selectRevisions('standard', 1.0)" class="mr-4 mt-1 w-5 h-5" checked>
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Standard (1 revision per stage)</div>
+                                        <div class="text-sm text-gray-600">One round of changes at each milestone</div>
+                                    </div>
+                                    <div class="text-gray-500">×1.0</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="revisions" value="extended" onchange="selectRevisions('extended', 1.15)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Extended (3 revisions per stage)</div>
+                                        <div class="text-sm text-gray-600">More flexibility for refinements</div>
+                                    </div>
+                                    <div class="font-bold" style="color: #E67E73;">×1.15</div>
+                                </label>
+
+                                <label class="radio-option flex items-start p-4 border-2 rounded-lg cursor-pointer hover:border-blue-500 transition">
+                                    <input type="radio" name="revisions" value="unlimited" onchange="selectRevisions('unlimited', 1.35)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-lg" style="color: #2D3E8F;">Unlimited Revisions</div>
+                                        <div class="text-sm text-gray-600">As many iterations as needed</div>
+                                    </div>
+                                    <div class="font-bold" style="color: #E67E73;">×1.35</div>
+                                </label>
+                            </div>
+
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-sm text-gray-700 mt-6">
+                                💡 Revisions are major changes. Minor tweaks and bug fixes are always included.
+                            </div>
+                        </div>
+
+                        <!-- Step 14: Confidentiality -->
+                        <div id="step14" class="step-content step-hidden">
+                            <h2 class="text-2xl font-bold mb-6" style="color: #1A1D2E;">Confidentiality</h2>
+
+                            <div class="border-2 rounded-lg p-6">
+                                <label class="checkbox-option flex items-start cursor-pointer">
+                                    <input type="checkbox" id="privateCommission" onchange="updateCheckbox('privateCommission', 600)" class="mr-4 mt-1 w-5 h-5">
+                                    <div class="flex-1">
+                                        <div class="font-bold text-xl mb-2" style="color: #2D3E8F;">Private Commission</div>
+                                        <p class="text-gray-700 mb-3">Work-in-progress will not be shared on social media or portfolio. Final model remains private unless you give permission.</p>
+                                        <ul class="text-sm text-gray-600 space-y-1 mb-3">
+                                            <li>• No WIP posts on social media</li>
+                                            <li>• Not included in portfolio</li>
+                                            <li>• NDA available upon request</li>
+                                            <li>• Full discretion maintained</li>
+                                        </ul>
+                                        <div class="font-bold text-xl" style="color: #E67E73;">+$600</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-sm text-gray-700 mt-6">
+                                💡 This is the final step! Click "View Final Quote" below to see your complete estimate.
+                            </div>
+
+                            <div class="text-center mt-8">
+                                <button onclick="finishCalculator()" class="px-8 py-4 text-white rounded-lg font-bold text-lg hover:opacity-90 transition" style="background: #E67E73;">
+                                    View Final Quote
+                                </button>
                             </div>
                         </div>
 
@@ -357,7 +781,7 @@
                     <div class="price-sidebar bg-white rounded-xl shadow-lg p-6">
                         <h3 class="text-xl font-bold mb-4" style="color: #2D3E8F;">💰 Estimated Quote</h3>
 
-                        <div id="priceBreakdown" class="space-y-3 text-sm">
+                        <div id="priceBreakdown" class="space-y-2 text-sm">
                             <div class="text-gray-500 text-center py-8">
                                 Select options to see pricing
                             </div>
@@ -387,16 +811,68 @@
         // Calculator State
         const state = {
             currentStep: 1,
-            totalSteps: 5,
+            totalSteps: 14,
             selections: {
                 service: null,
                 servicePrice: 0,
                 bodyType: null,
                 bodyMultiplier: 1.0,
-                commercialRights: false,
                 complexity: null,
-                complexityMultiplier: 1.0
+                complexityMultiplier: 1.0,
+                // Sliders
+                additionalExpressions: 0,
+                customExpressions: 0,
+                handPoses: 0,
+                outfits: 0,
+                hairstyles: 0,
+                toggleAccessories: 0,
+                // Checkboxes - Special Parts
+                animalParts: false,
+                wings: false,
+                horns: false,
+                glowEffects: false,
+                // Checkboxes - Tracking
+                handTracking: false,
+                fullBodyTracking: false,
+                advancedLipsync: false,
+                iphoneArkit: false,
+                // Checkboxes - Source Files
+                blenderSource: false,
+                fbxPsdSource: false,
+                completeSource: false,
+                // Radio - Commercial Rights
+                commercialRights: 'personal',
+                commercialMultiplier: 1.0,
+                // Radio - Timeline
+                timeline: 'standard',
+                timelineMultiplier: 1.0,
+                // Radio - Revisions
+                revisions: 'standard',
+                revisionsMultiplier: 1.0,
+                // Checkbox - Confidentiality
+                privateCommission: false
             }
+        };
+
+        const prices = {
+            additionalExpressions: 50,
+            customExpressions: 80,
+            handPoses: 100,
+            outfits: 600,
+            hairstyles: 350,
+            toggleAccessories: 120,
+            animalParts: 250,
+            wings: 300,
+            horns: 180,
+            glowEffects: 200,
+            handTracking: 350,
+            fullBodyTracking: 500,
+            advancedLipsync: 180,
+            iphoneArkit: 400,
+            blenderSource: 350,
+            fbxPsdSource: 280,
+            completeSource: 600,
+            privateCommission: 600
         };
 
         function startCalculator() {
@@ -426,11 +902,6 @@
             updatePrice();
         }
 
-        function toggleCommercialRights() {
-            state.selections.commercialRights = document.getElementById('commercialRights').checked;
-            updatePrice();
-        }
-
         function selectComplexity(type, multiplier) {
             state.selections.complexity = type;
             state.selections.complexityMultiplier = multiplier;
@@ -445,39 +916,169 @@
             updatePrice();
         }
 
+        function updateSlider(id, pricePerItem, max) {
+            const value = parseInt(document.getElementById(id).value);
+            state.selections[id] = value;
+
+            document.getElementById(id + 'Count').textContent = value;
+            document.getElementById(id + 'Price').textContent = (value * pricePerItem).toLocaleString();
+
+            updatePrice();
+        }
+
+        function updateCheckbox(id, price) {
+            state.selections[id] = document.getElementById(id).checked;
+            updatePrice();
+        }
+
+        function selectCommercialRights(type, multiplier) {
+            state.selections.commercialRights = type;
+            state.selections.commercialMultiplier = multiplier;
+            updatePrice();
+        }
+
+        function selectTimeline(type, multiplier) {
+            state.selections.timeline = type;
+            state.selections.timelineMultiplier = multiplier;
+            updatePrice();
+        }
+
+        function selectRevisions(type, multiplier) {
+            state.selections.revisions = type;
+            state.selections.revisionsMultiplier = multiplier;
+            updatePrice();
+        }
+
         function updatePrice() {
-            const { servicePrice, bodyMultiplier, commercialRights, complexityMultiplier } = state.selections;
+            const s = state.selections;
 
-            if (!servicePrice) return;
+            if (!s.servicePrice) return;
 
-            let basePrice = servicePrice;
-            let price = basePrice * bodyMultiplier * complexityMultiplier;
+            // 1. Base × body × complexity
+            let price = s.servicePrice * s.bodyMultiplier * s.complexityMultiplier;
+            const baseCalculated = price;
 
-            if (commercialRights) {
-                price *= 1.2;
+            // 2. Add all extras (sliders + checkboxes)
+            const extras = {
+                expressions: s.additionalExpressions * prices.additionalExpressions,
+                customExpressions: s.customExpressions * prices.customExpressions,
+                handPoses: s.handPoses * prices.handPoses,
+                outfits: s.outfits * prices.outfits,
+                hairstyles: s.hairstyles * prices.hairstyles,
+                toggleAccessories: s.toggleAccessories * prices.toggleAccessories,
+                animalParts: s.animalParts ? prices.animalParts : 0,
+                wings: s.wings ? prices.wings : 0,
+                horns: s.horns ? prices.horns : 0,
+                glowEffects: s.glowEffects ? prices.glowEffects : 0,
+                handTracking: s.handTracking ? prices.handTracking : 0,
+                fullBodyTracking: s.fullBodyTracking ? prices.fullBodyTracking : 0,
+                advancedLipsync: s.advancedLipsync ? prices.advancedLipsync : 0,
+                iphoneArkit: s.iphoneArkit ? prices.iphoneArkit : 0,
+                blenderSource: s.blenderSource ? prices.blenderSource : 0,
+                fbxPsdSource: s.fbxPsdSource ? prices.fbxPsdSource : 0,
+                completeSource: s.completeSource ? prices.completeSource : 0
+            };
+
+            const extrasTotal = Object.values(extras).reduce((a, b) => a + b, 0);
+            price += extrasTotal;
+
+            const priceBeforeMultipliers = price;
+
+            // 3. Apply multipliers
+            price *= s.commercialMultiplier;
+            price *= s.timelineMultiplier;
+            price *= s.revisionsMultiplier;
+
+            // 4. Add confidentiality
+            if (s.privateCommission) {
+                price += prices.privateCommission;
             }
 
+            // 5. Calculate range (±5%)
             const minPrice = Math.round(price * 0.95);
             const maxPrice = Math.round(price * 1.05);
 
-            // Update breakdown
+            // Build breakdown display
             const breakdown = [];
-            breakdown.push(`<div class="flex justify-between"><span>Base:</span><span class="font-semibold">$${basePrice.toLocaleString()}</span></div>`);
 
-            if (state.selections.bodyType) {
-                const diff = Math.round(basePrice * (bodyMultiplier - 1));
+            // Base section
+            breakdown.push(`<div class="font-bold mb-2" style="color: #2D3E8F;">Base Calculation</div>`);
+            breakdown.push(`<div class="flex justify-between"><span>Base Service:</span><span class="font-semibold">$${s.servicePrice.toLocaleString()}</span></div>`);
+
+            if (s.bodyType) {
+                const diff = Math.round(s.servicePrice * (s.bodyMultiplier - 1));
                 const sign = diff >= 0 ? '+' : '';
-                breakdown.push(`<div class="flex justify-between text-sm"><span>Body Type - ${state.selections.bodyType} (×${bodyMultiplier}):</span><span>${sign}$${diff.toLocaleString()}</span></div>`);
+                const label = s.bodyType.charAt(0).toUpperCase() + s.bodyType.slice(1);
+                breakdown.push(`<div class="flex justify-between text-sm"><span>${label} (×${s.bodyMultiplier}):</span><span>${sign}$${diff.toLocaleString()}</span></div>`);
             }
 
-            if (state.selections.complexity) {
-                const diff = Math.round(basePrice * bodyMultiplier * (complexityMultiplier - 1));
-                breakdown.push(`<div class="flex justify-between text-sm"><span>Complexity - ${state.selections.complexity} (×${complexityMultiplier}):</span><span>+$${diff.toLocaleString()}</span></div>`);
+            if (s.complexity) {
+                const diff = Math.round(s.servicePrice * s.bodyMultiplier * (s.complexityMultiplier - 1));
+                const label = s.complexity.charAt(0).toUpperCase() + s.complexity.slice(1);
+                breakdown.push(`<div class="flex justify-between text-sm"><span>${label} (×${s.complexityMultiplier}):</span><span>+$${diff.toLocaleString()}</span></div>`);
             }
 
-            if (commercialRights) {
-                const diff = Math.round(price / 1.2 * 0.2);
-                breakdown.push(`<div class="flex justify-between text-sm"><span>Commercial Rights (+20%):</span><span>+$${diff.toLocaleString()}</span></div>`);
+            breakdown.push(`<div class="border-t my-2"></div>`);
+            breakdown.push(`<div class="flex justify-between font-semibold"><span>Subtotal:</span><span>$${Math.round(baseCalculated).toLocaleString()}</span></div>`);
+
+            // Add-ons section
+            if (extrasTotal > 0) {
+                breakdown.push(`<div class="border-t my-3"></div>`);
+                breakdown.push(`<div class="font-bold mb-2" style="color: #2D3E8F;">Add-ons</div>`);
+
+                if (extras.expressions > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Expressions (${s.additionalExpressions}):</span><span>+$${extras.expressions.toLocaleString()}</span></div>`);
+                if (extras.customExpressions > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Custom Expr. (${s.customExpressions}):</span><span>+$${extras.customExpressions.toLocaleString()}</span></div>`);
+                if (extras.handPoses > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Hand Poses (${s.handPoses}):</span><span>+$${extras.handPoses.toLocaleString()}</span></div>`);
+                if (extras.outfits > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Outfits (${s.outfits}):</span><span>+$${extras.outfits.toLocaleString()}</span></div>`);
+                if (extras.hairstyles > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Hairstyles (${s.hairstyles}):</span><span>+$${extras.hairstyles.toLocaleString()}</span></div>`);
+                if (extras.toggleAccessories > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Toggle Access. (${s.toggleAccessories}):</span><span>+$${extras.toggleAccessories.toLocaleString()}</span></div>`);
+                if (extras.animalParts > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Animal Parts:</span><span>+$${extras.animalParts.toLocaleString()}</span></div>`);
+                if (extras.wings > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Wings:</span><span>+$${extras.wings.toLocaleString()}</span></div>`);
+                if (extras.horns > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Horns:</span><span>+$${extras.horns.toLocaleString()}</span></div>`);
+                if (extras.glowEffects > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Glow Effects:</span><span>+$${extras.glowEffects.toLocaleString()}</span></div>`);
+                if (extras.handTracking > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Hand Tracking:</span><span>+$${extras.handTracking.toLocaleString()}</span></div>`);
+                if (extras.fullBodyTracking > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Full Body Track:</span><span>+$${extras.fullBodyTracking.toLocaleString()}</span></div>`);
+                if (extras.advancedLipsync > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Adv. Lipsync:</span><span>+$${extras.advancedLipsync.toLocaleString()}</span></div>`);
+                if (extras.iphoneArkit > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>iPhone ARKit:</span><span>+$${extras.iphoneArkit.toLocaleString()}</span></div>`);
+                if (extras.blenderSource > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Blender Source:</span><span>+$${extras.blenderSource.toLocaleString()}</span></div>`);
+                if (extras.fbxPsdSource > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>FBX+PSD Source:</span><span>+$${extras.fbxPsdSource.toLocaleString()}</span></div>`);
+                if (extras.completeSource > 0) breakdown.push(`<div class="flex justify-between text-sm"><span>Complete Source:</span><span>+$${extras.completeSource.toLocaleString()}</span></div>`);
+
+                breakdown.push(`<div class="border-t my-2"></div>`);
+                breakdown.push(`<div class="flex justify-between font-semibold"><span>Add-ons Total:</span><span>+$${extrasTotal.toLocaleString()}</span></div>`);
+            }
+
+            // Multipliers section
+            if (s.commercialMultiplier !== 1.0 || s.timelineMultiplier !== 1.0 || s.revisionsMultiplier !== 1.0) {
+                breakdown.push(`<div class="border-t my-3"></div>`);
+                breakdown.push(`<div class="font-bold mb-2" style="color: #2D3E8F;">Adjustments</div>`);
+
+                if (s.commercialMultiplier !== 1.0) {
+                    const rightsLabels = { personal: 'Personal', commercial: 'Commercial', merchandise: 'Merchandise', full: 'Full Rights' };
+                    const diff = Math.round(priceBeforeMultipliers * (s.commercialMultiplier - 1));
+                    breakdown.push(`<div class="flex justify-between text-sm"><span>${rightsLabels[s.commercialRights]} (×${s.commercialMultiplier}):</span><span>+$${diff.toLocaleString()}</span></div>`);
+                }
+
+                if (s.timelineMultiplier !== 1.0) {
+                    const timelineLabels = { relaxed: 'Relaxed', standard: 'Standard', rush: 'Rush', express: 'Express' };
+                    const currentPrice = priceBeforeMultipliers * s.commercialMultiplier;
+                    const diff = Math.round(currentPrice * (s.timelineMultiplier - 1));
+                    const sign = diff >= 0 ? '+' : '';
+                    breakdown.push(`<div class="flex justify-between text-sm"><span>${timelineLabels[s.timeline]} (×${s.timelineMultiplier}):</span><span>${sign}$${diff.toLocaleString()}</span></div>`);
+                }
+
+                if (s.revisionsMultiplier !== 1.0) {
+                    const revisionLabels = { standard: 'Standard', extended: 'Extended', unlimited: 'Unlimited' };
+                    const currentPrice = priceBeforeMultipliers * s.commercialMultiplier * s.timelineMultiplier;
+                    const diff = Math.round(currentPrice * (s.revisionsMultiplier - 1));
+                    breakdown.push(`<div class="flex justify-between text-sm"><span>${revisionLabels[s.revisions]} Revisions (×${s.revisionsMultiplier}):</span><span>+$${diff.toLocaleString()}</span></div>`);
+                }
+            }
+
+            // Confidentiality
+            if (s.privateCommission) {
+                breakdown.push(`<div class="border-t my-2"></div>`);
+                breakdown.push(`<div class="flex justify-between text-sm"><span>Private Commission:</span><span>+$${prices.privateCommission.toLocaleString()}</span></div>`);
             }
 
             document.getElementById('priceBreakdown').innerHTML = breakdown.join('');
@@ -502,18 +1103,18 @@
 
                 // Disable next button until selection is made
                 if (state.currentStep < state.totalSteps) {
-                    document.getElementById('nextBtn').disabled = true;
+                    // Auto-enable for steps that don't require selection
+                    if ([3, 5, 6, 7, 8, 9, 10, 14].includes(state.currentStep)) {
+                        document.getElementById('nextBtn').disabled = false;
+                    } else {
+                        document.getElementById('nextBtn').disabled = true;
+                    }
                 } else {
                     document.getElementById('nextBtn').classList.add('hidden');
                 }
 
                 // Enable previous button
                 document.getElementById('prevBtn').disabled = false;
-
-                // Auto-enable next for step 3 and 5
-                if (state.currentStep === 3 || state.currentStep === 5) {
-                    document.getElementById('nextBtn').disabled = false;
-                }
             }
         }
 
@@ -547,17 +1148,33 @@
             document.getElementById('progressBar').style.width = progress + '%';
             document.getElementById('currentStep').textContent = state.currentStep;
 
-            const titles = ['Service Type', 'Body Type', 'Platform Selection', 'Character Complexity', "What's Included"];
+            const titles = [
+                'Service Type',
+                'Body Type',
+                'Platform Selection',
+                'Character Complexity',
+                "What's Included",
+                'Expressions & Emotes',
+                'Hand Poses',
+                'Outfits & Hair',
+                'Special Parts & Tracking',
+                'Source Files',
+                'Commercial Rights',
+                'Delivery Timeline',
+                'Revision Rounds',
+                'Confidentiality'
+            ];
             document.getElementById('stepTitle').textContent = titles[state.currentStep - 1];
         }
 
         function finishCalculator() {
-            alert('Calculator complete! Your selections have been saved.\n\nIn a production version, this would:\n- Send data to a backend\n- Generate a PDF quote\n- Redirect to a contact form\n\nTotal estimate: $' + document.getElementById('minPrice').textContent + ' - $' + document.getElementById('maxPrice').textContent);
+            const total = document.getElementById('minPrice').textContent + ' - $' + document.getElementById('maxPrice').textContent;
+            alert('Calculator complete! Your selections have been saved.\n\nIn a production version, this would:\n- Send data to a backend\n- Generate a PDF quote\n- Redirect to a contact form\n\nTotal estimate: $' + total);
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('VTuber Calculator initialized');
+            console.log('VTuber Calculator initialized - 14 steps');
         });
     </script>
 </body>
