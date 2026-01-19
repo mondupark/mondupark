@@ -10,6 +10,10 @@
 
     <style>
         /* Custom styles for the calculator */
+        .hidden {
+            display: none !important;
+        }
+
         .step-content {
             min-height: 500px;
             transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1815,11 +1819,11 @@ ${formData.referenceUrls ? '**🔗 URLs:**\n' + formData.referenceUrls : ''}
         async function sendConfirmationEmail(formData) {
             // NOTE: Configure EmailJS with your service ID, template ID, and public key
             // Sign up at https://www.emailjs.com/ and create a template
-            const serviceId = ''; // 'service_pghdwkd'; // Your EmailJS service ID
-                    const templateId = 'template_pd2dimn'; // 'template_pd2dimn'; // Your EmailJS template ID
-                    const publicKey = 'VIO7CsFr-pEg7Muvr'; // 'VIO7CsFr-pEg7Muvr'; // Your EmailJS public key
+            const serviceId = 'service_pghdwkd'; // Your EmailJS service ID
+            const templateId = 'template_pd2dimn'; // Your EmailJS template ID
+            const publicKey = 'VIO7CsFr-pEg7Muvr'; // Your EmailJS public key
 
-                    const serviceId = 'service_pghdwkd'; // 'service_pghdwkd'; // Your EmailJS service ID
+            if (!serviceId || !templateId || !publicKey) {
                 console.log('EmailJS not configured. Skipping confirmation email.');
                 return;
             }
@@ -2124,54 +2128,6 @@ ${formData.referenceUrls ? '**🔗 URLs:**\n' + formData.referenceUrls : ''}
             }
         }
 
-        async function sendConfirmationEmail(formData) {
-            const serviceId = '';
-            const templateId = '';
-            const publicKey = '';
-
-            if (!serviceId || !templateId || !publicKey) {
-                console.log('EmailJS not configured. Skipping confirmation email.');
-                return { success: true, skipped: true };
-            }
-
-            try {
-                const s = formData.selections;
-                const serviceTypes = { full: 'Full Package', custom: 'Custom 3D Model', vroid: 'VRoid Customization', rigging: 'Rigging Only' };
-
-                const emailData = {
-                    to_email: formData.contact.email,
-                    to_name: formData.contact.name,
-                    service_type: serviceTypes[s.service],
-                    body_type: s.bodyType,
-                    complexity: s.complexity,
-                    min_price: formData.pricing.minPrice.toLocaleString(),
-                    max_price: formData.pricing.maxPrice.toLocaleString(),
-                    reply_to: 'dhpark9609@gmail.com'
-                };
-
-                if (typeof emailjs === 'undefined') {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-                    await new Promise((resolve, reject) => {
-                        script.onload = () => {
-                            emailjs.init(publicKey);
-                            emailjs.send(serviceId, templateId, emailData)
-                                .then(resolve)
-                                .catch(reject);
-                        };
-                        script.onerror = reject;
-                        document.head.appendChild(script);
-                    });
-                } else {
-                    await emailjs.send(serviceId, templateId, emailData);
-                }
-
-                return { success: true };
-            } catch (error) {
-                console.error('Email send error:', error);
-                return { success: false, error: error.message };
-            }
-        }
 
         // Enhanced submitForm with better error handling
         async function submitForm() {
