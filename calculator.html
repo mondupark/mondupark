@@ -1202,9 +1202,31 @@
         };
 
         function startCalculator() {
-            document.getElementById('openingMessage').classList.add('hidden');
-            document.getElementById('calculatorContainer').classList.remove('hidden');
-            updatePrice();
+            try {
+                console.log('startCalculator() called');
+                const openingMsg = document.getElementById('openingMessage');
+                const calcContainer = document.getElementById('calculatorContainer');
+
+                if (!openingMsg) {
+                    console.error('openingMessage element not found');
+                    return;
+                }
+                if (!calcContainer) {
+                    console.error('calculatorContainer element not found');
+                    return;
+                }
+
+                console.log('Hiding opening message, showing calculator');
+                openingMsg.classList.add('hidden');
+                calcContainer.classList.remove('hidden');
+
+                console.log('Calling updatePrice()');
+                updatePrice();
+                console.log('startCalculator() completed successfully');
+            } catch (error) {
+                console.error('Error in startCalculator():', error);
+                alert('An error occurred: ' + error.message);
+            }
         }
 
         function selectService(type, price) {
