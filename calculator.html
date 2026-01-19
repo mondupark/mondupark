@@ -1618,6 +1618,218 @@
             alert('Privacy Policy\n\nInformation collected: Name, Email, Discord ID\nPurpose: Commission inquiry response and communication\nRetention: 1 year after inquiry completion\nUsage: We will only use your information to respond to your commission inquiry and will not share it with third parties.');
         }
 
+        // Form Submission
+        async function submitForm() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="inline-block animate-spin">⏳</span> Sending...';
+
+            try {
+                // Collect all data
+                const formData = collectFormData();
+
+                // Send to Discord (if webhook URL is configured)
+                await sendToDiscord(formData);
+
+                // Send confirmation email (if EmailJS is configured)
+                await sendConfirmationEmail(formData);
+
+                // Success message
+//                alert('✅ Your inquiry has been received!\n\nPlease check your email for confirmation.\n\nI\'ll review your request and get back to you within 1-2 business days.');
+
+                // Reset and go back to step 1
+                window.location.reload();
+
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert('❌ Something went wrong. Please try again or email us directly at dhpark9609@gmail.com');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '📨 Send Quote Request';
+            }
+        }
+
+        function collectFormData() {
+            const s = state.selections;
+            const { servicePrice, bodyMultiplier, complexityMultiplier } = s;
+
+            let price = servicePrice * bodyMultiplier * complexityMultiplier;
+            price += s.additionalExpressions * prices.additionalExpressions;
+            price += s.customExpressions * prices.customExpressions;
+            price += s.handPoses * prices.handPoses;
+            price += s.outfits * prices.outfits;
+            price += s.hairstyles * prices.hairstyles;
+            price += s.toggleAccessories * prices.toggleAccessories;
+            price += s.animalParts ? prices.animalParts : 0;
+            price += s.wings ? prices.wings : 0;
+            price += s.horns ? prices.horns : 0;
+            price += s.glowEffects ? prices.glowEffects : 0;
+            price += s.handTracking ? prices.handTracking : 0;
+            price += s.fullBodyTracking ? prices.fullBodyTracking : 0;
+            price += s.advancedLipsync ? prices.advancedLipsync : 0;
+            price += s.iphoneArkit ? prices.iphoneArkit : 0;
+            price += s.blenderSource ? prices.blenderSource : 0;
+            price += s.fbxPsdSource ? prices.fbxPsdSource : 0;
+            price += s.completeSource ? prices.completeSource : 0;
+
+            price *= s.commercialMultiplier;
+            price *= s.timelineMultiplier;
+            price *= s.revisionsMultiplier;
+
+            if (s.privateCommission) price += prices.privateCommission;
+
+            const minPrice = Math.round(price * 0.95);
+            const maxPrice = Math.round(price * 1.05);
+
+            return {
+                contact: {
+                    name: s.contactName,
+                    email: s.contactEmail,
+                    discord: s.contactDiscord || 'N/A'
+                },
+                selections: s,
+                pricing: { minPrice, maxPrice },
+                files: state.uploadedFiles,
+                referenceUrls: document.getElementById('referenceUrls').value,
+                additionalNotes: s.additionalNotes || 'N/A',
+                timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) + ' KST'
+            };
+        }
+
+        async function sendToDiscord(formData) {
+            // NOTE: For production, set DISCORD_WEBHOOK_URL as environment variable
+            // or use a serverless function to keep the webhook URL secret
+            const webhookUrl = ''; // Set your Discord webhook URL here or use env variable
+
+            if (!webhookUrl) {
+                console.log('Discord webhook not configured. Skipping Discord notification.');
+                return;
+            }
+
+            const s = formData.selections;
+            const serviceTypes = { full: 'Full Package ($8,000)', custom: 'Custom 3D Model ($4,000)', vroid: 'VRoid Customization ($1,500)', rigging: 'Rigging Only ($800)' };
+            const bodyTypes = { fullbody: 'Fullbody (×1.0)', halfbody: 'Halfbody (×0.7)', chibi: 'Chibi (×0.6)' };
+            const complexityTypes = { simple: 'Simple (×1.0)', standard: 'Standard (×1.4)', complex: 'Complex (×1.8)' };
+            const rightsTypes = { personal: 'Personal Use Only', commercial: 'Commercial Use', merchandise: 'Merchandise Rights', full: 'Full Rights Transfer' };
+            const timelineTypes = { relaxed: 'Relaxed (10-12 weeks)', standard: 'Standard (8-10 weeks)', rush: 'Rush (6 weeks)', express: 'Express (4 weeks)' };
+            const revisionTypes = { standard: 'Standard (1 per stage)', extended: 'Extended (3 per stage)', unlimited: 'Unlimited' };
+
+            let addons = [];
+            if (s.additionalExpressions > 0) addons.push(`• Additional Expressions: ${s.additionalExpressions} (+$${s.additionalExpressions * 50})`);
+            if (s.customExpressions > 0) addons.push(`• Custom Expressions: ${s.customExpressions} (+$${s.customExpressions * 80})`);
+            if (s.handPoses > 0) addons.push(`• Hand Poses: ${s.handPoses} (+$${s.handPoses * 100})`);
+            if (s.outfits > 0) addons.push(`• Additional Outfits: ${s.outfits} (+$${s.outfits * 600})`);
+            if (s.hairstyles > 0) addons.push(`• Additional Hairstyles: ${s.hairstyles} (+$${s.hairstyles * 350})`);
+            if (s.toggleAccessories > 0) addons.push(`• Toggle Accessories: ${s.toggleAccessories} (+$${s.toggleAccessories * 120})`);
+            if (s.animalParts) addons.push('• Animal Ears + Tail (+$250)');
+            if (s.wings) addons.push('• Wings (+$300)');
+            if (s.horns) addons.push('• Horns/Antennae (+$180)');
+            if (s.glowEffects) addons.push('• Glow Effects (+$200)');
+            if (s.handTracking) addons.push('• Hand Tracking Support (+$350)');
+            if (s.fullBodyTracking) addons.push('• Full Body Tracking (+$500)');
+            if (s.advancedLipsync) addons.push('• Advanced Lipsync (10 visemes) (+$180)');
+            if (s.iphoneArkit) addons.push('• iPhone ARKit Facial Tracking (+$400)'); // ⭐ ARKit included
+
+            let sourceFiles = [];
+            if (s.blenderSource) sourceFiles.push('• Blender Source Files (+$350)');
+            if (s.fbxPsdSource) sourceFiles.push('• FBX + PSD Source (+$280)');
+            if (s.completeSource) sourceFiles.push('• Complete Source Package (+$600)');
+
+            const message = {
+                content: `🎨 **New VTuber Commission Inquiry!**
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**👤 Client:** ${formData.contact.name}
+**📧 Email:** ${formData.contact.email}
+**💬 Discord:** ${formData.contact.discord}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📊 Selected Options:**
+
+• **Service:** ${serviceTypes[s.service]}
+• **Body Type:** ${bodyTypes[s.bodyType]}
+• **Complexity:** ${complexityTypes[s.complexity]}
+• **Platform:** VRM Standard
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**✨ Add-ons:**
+${addons.length > 0 ? addons.join('\n') : 'None'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📁 Source Files:**
+${sourceFiles.length > 0 ? sourceFiles.join('\n') : 'Standard only (VRM, Unity, PNG)'}
+
+**⚖️ Rights:** ${rightsTypes[s.commercialRights]}
+**⏱️ Timeline:** ${timelineTypes[s.timeline]}
+**🔄 Revisions:** ${revisionTypes[s.revisions]}
+**🔒 Private:** ${s.privateCommission ? '✓' : '✗'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**💰 Estimated Quote:** $${formData.pricing.minPrice.toLocaleString()} ~ $${formData.pricing.maxPrice.toLocaleString()}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📎 References:** ${formData.files.length} images attached
+${formData.referenceUrls ? '**🔗 URLs:**\n' + formData.referenceUrls : ''}
+
+**💬 Additional Notes:**
+"${formData.additionalNotes}"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**📅 Inquiry Time:** ${formData.timestamp}`
+            };
+
+            await fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(message)
+            });
+        }
+
+        async function sendConfirmationEmail(formData) {
+            // NOTE: Configure EmailJS with your service ID, template ID, and public key
+            // Sign up at https://www.emailjs.com/ and create a template
+            const serviceId = ''; // 'service_pghdwkd'; // Your EmailJS service ID
+                    const templateId = 'template_pd2dimn'; // 'template_pd2dimn'; // Your EmailJS template ID
+                    const publicKey = 'VIO7CsFr-pEg7Muvr'; // 'VIO7CsFr-pEg7Muvr'; // Your EmailJS public key
+
+                    const serviceId = 'service_pghdwkd'; // 'service_pghdwkd'; // Your EmailJS service ID
+                console.log('EmailJS not configured. Skipping confirmation email.');
+                return;
+            }
+
+            const s = formData.selections;
+            const serviceTypes = { full: 'Full Package', custom: 'Custom 3D Model', vroid: 'VRoid Customization', rigging: 'Rigging Only' };
+
+            const emailData = {
+                to_email: formData.contact.email,
+                to_name: formData.contact.name,
+                service_type: serviceTypes[s.service],
+                body_type: s.bodyType,
+                complexity: s.complexity,
+                min_price: formData.pricing.minPrice.toLocaleString(),
+                max_price: formData.pricing.maxPrice.toLocaleString(),
+                reply_to: 'dhpark9609@gmail.com'
+            };
+
+            // Load EmailJS SDK if not already loaded
+            if (typeof emailjs === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+                script.onload = () => {
+                    emailjs.init(publicKey);
+                    emailjs.send(serviceId, templateId, emailData);
+                };
+                document.head.appendChild(script);
+            } else {
+                await emailjs.send(serviceId, templateId, emailData);
+            }
+        }
+
         // Mobile Quote Panel Functions
         function toggleMobileQuote() {
             const modal = document.getElementById('mobileQuoteModal');
